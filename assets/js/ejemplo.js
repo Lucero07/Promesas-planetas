@@ -16,6 +16,66 @@ function getJSON(url){
 	})
 	};
 
-	getJSON("data/earth-like-results.json") // Este "data..." es el parametro url de nuestra función anterior.
-	.then(function(mensaje){return(getJSON(mensaje.results[0]))}) // el return nos permite acceder a una nueva promesa ya que solo es un then por promise.
-	.then(function(resultado){console.log(resultado)}); // este then funciona para que el promise anterior sea mostrado en consola.
+
+
+getJSON("data/earth-like-results.json") // Este "data..." es el parametro url de nuestra función anterior.
+ 	.then(function(planetas){
+     getJSON(planetas.results.forEach(function(planeta){
+        getJSON(planeta).then(function(datosPlaneta){
+			crearTarjeta(datosPlaneta);
+
+
+            console.log(datosPlaneta);
+
+		})
+    }));
+});
+
+var crearTarjeta = function (datosPlaneta) {
+	var nombre = datosPlaneta.pl_name;
+	var fechadescubrimiento = datosPlaneta.pl_disc;
+	var masa1 = datosPlaneta.pl_masse;
+	var decinf = datosPlaneta.dec;
+	var ruta = datosPlaneta.pl_edelink;
+
+
+	var contenedorTarjeta = document.createElement("div");
+	var tarjeta = document.createElement("div");
+	var contImagen = document.createElement("div");
+	var imagen = document.createElement('img');
+	var titulo = document.createElement('span');
+	var contInf = document.createElement("div");
+	var masa = document.createElement('p');
+	var descubrimiento = document.createElement('p');
+	var dec = document.createElement('p');
+	var enlace = document.createElement("div");
+	var referencia = document.createElement('a');
+
+	contenedorTarjeta.className = 'col s12 m6';
+	tarjeta.className ='card';
+	contImagen.className ='card-image';
+	imagen.src = 'static/img/planeta1.jpg';
+	titulo.innerText = nombre;
+	titulo.className = 'card-title';
+	contInf.className = 'card-content';
+	masa.innerText = 'Masa: '+ masa1;
+	descubrimiento.innerText = 'Año de descubrimiento: ' + fechadescubrimiento;
+	dec.innerText = 'no se que es: ' + decinf;
+	enlace.className = 'card-action';
+	referencia.setAttribute('href',ruta);
+	referencia.innerText ='Mas ...'
+
+	contImagen.appendChild(imagen);
+	contImagen.appendChild(titulo);
+	contInf.appendChild(masa);
+	contInf.appendChild(descubrimiento);
+	contInf.appendChild(dec);
+	enlace.appendChild(referencia);
+	tarjeta.appendChild(contImagen);
+	tarjeta.appendChild(contInf);
+	tarjeta.appendChild(enlace);
+	contenedorTarjeta.appendChild(tarjeta)
+	var tarjetaPlanetas = document.getElementById('datos-planetas');
+	tarjetaPlanetas.appendChild(contenedorTarjeta);
+
+};
